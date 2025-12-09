@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>God's Plan | Dashboard de Control</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fuentes e Iconos -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['"Plus Jakarta Sans"', 'sans-serif'] },
+                    colors: {
+                        brand: '#E70000', // Rojo Vivo GodsPlan
+                        dark: '#050505',
+                        glass: 'rgba(255, 255, 255, 0.05)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #050505; color: white; }
+        
+        /* Fondo Animado y Orbes (Mantiene la estética de lujo) */
+        .bg-gradient {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background: radial-gradient(circle at 50% 50%, #1a0505 0%, #000000 100%);
+        }
+        .bg-orb {
+            position: absolute; 
+            width: 200vmax; 
+            height: 200vmax; 
+            background: radial-gradient(circle, rgba(231, 0, 0, 0.1) 0%, rgba(0,0,0,0) 70%);
+            border-radius: 50%; pointer-events: none;
+            animation: float 10s infinite ease-in-out;
+            box-shadow: 0 0 100px rgba(231, 0, 0, 0.2); 
+        }
+        @keyframes float { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(30px, -30px); } }
+
+        /* Tarjeta de Aplicación (Glassmorphism + Borde Rojo) */
+        .app-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .app-card:hover {
+            transform: translateY(-5px);
+            border-color: #E70000;
+            box-shadow: 0 10px 30px rgba(231, 0, 0, 0.3);
+        }
+
+        /* Nav y Header */
+        #global-nav { backdrop-filter: blur(15px); border-bottom: 1px solid rgba(255,255,255,0.1); }
+        .text-brand-glow { text-shadow: 0 0 8px rgba(231, 0, 0, 0.8); }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <div class="bg-gradient">
+        <!-- Orbes de fondo -->
+        <div class="bg-orb" style="top: -60vmax; left: -60vmax;"></div>
+        <div class="bg-orb" style="bottom: -60vmax; right: -60vmax; animation-delay: 6s;"></div>
+    </div>
+
+    <!-- BARRA DE NAVEGACIÓN GLOBAL (Eficiencia y Ergonomía en la Navegación) -->
+    <nav id="global-nav" class="fixed top-0 w-full h-16 bg-dark/80 flex items-center justify-between px-6 z-50">
+        <a href="https://dashboard.godsplan.site" class="flex items-center gap-2 font-black tracking-wider text-white group">
+            <i class="ph-fill ph-circles-three-plus text-2xl text-brand group-hover:text-white transition-colors"></i> 
+            <span class="text-xl">Dashboard</span>
+        </a>
+        
+        <div class="flex items-center gap-6">
+            <nav class="space-x-4 text-sm font-semibold hidden md:flex">
+                <a href="https://adherencia.godsplan.site" class="text-gray-400 hover:text-white transition-colors">ADHERENCIA</a>
+                <a href="https://finanzas.godsplan.site" class="text-gray-400 hover:text-white transition-colors">TREASURY</a>
+                <a href="https://chat.godsplan.site" class="text-gray-400 hover:text-white transition-colors">CORPOCHAT</a>
+            </nav>
+
+            <button id="auth-button" onclick="window.authLogic.handleSignOut()" class="flex items-center gap-2 px-4 py-2 rounded-full bg-brand text-black text-sm font-bold hover:bg-white transition-colors">
+                <i class="ph-bold ph-sign-out text-lg"></i>
+                <span id="user-display">Cerrar Sesión</span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Dashboard Content -->
+    <main class="flex-grow w-full max-w-7xl mx-auto z-10 p-6 pt-24">
+
+        <!-- Banner de Bienvenida -->
+        <div class="bg-brand/10 border border-brand/40 p-6 rounded-xl mb-12 flex justify-between items-center text-white">
+            <div>
+                <h1 class="text-3xl font-bold text-brand-glow">
+                    BIENVENIDO, <span id="welcome-user-name">USUARIO</span>.
+                </h1>
+                <p class="text-gray-400 mt-1">Control Total de su Ecosistema GodsPlan.</p>
+            </div>
+            <div class="text-right">
+                 <p class="text-xs text-gray-500 uppercase font-mono tracking-wider">ID de Usuario</p>
+                 <p id="user-id-display" class="text-sm font-bold text-white"></p>
+            </div>
+        </div>
+
+        <!-- SECCIÓN 1: ESTATUS OPERATIVO GLOBAL (El Control Crítico) -->
+        <section class="mb-12">
+            <h2 class="text-xl font-bold mb-4 text-gray-300 flex items-center gap-2">
+                <i class="ph-fill ph-circles-three-bold text-brand"></i> ESTADO DEL SISTEMA
+            </h2>
+            <div id="status-cards-container" class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <!-- Las tarjetas de estado se insertarán aquí por JavaScript/Firebase -->
+                <div class="app-card p-4 rounded-xl text-center opacity-50">Cargando...</div>
+                <div class="app-card p-4 rounded-xl text-center opacity-50">Cargando...</div>
+                <div class="app-card p-4 rounded-xl text-center opacity-50">Cargando...</div>
+                <div class="app-card p-4 rounded-xl text-center opacity-50">Cargando...</div>
+            </div>
+        </section>
+
+        <!-- SECCIÓN 2: ACCESO A PROPIEDADES (Las Apps) -->
+        <section class="mb-12">
+             <h2 class="text-xl font-bold mb-4 text-gray-300 flex items-center gap-2">
+                <i class="ph-fill ph-puzzle-piece-fill text-brand"></i> SUITE DE APLICACIONES
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+
+                <!-- Propiedad 1: ADHERENCIA -->
+                <a href="https://adherencia.godsplan.site" class="app-card rounded-xl p-6 flex flex-col justify-between">
+                    <div>
+                        <i class="ph-fill ph-clock-user text-3xl text-brand mb-3"></i>
+                        <h3 class="text-2xl font-bold">Adherencia</h3>
+                        <p class="text-gray-400 text-sm mt-1">Control de tiempos y rendimiento del equipo.</p>
+                    </div>
+                    <p class="text-xs font-mono mt-4 text-gray-500 flex items-center gap-1">
+                        <i class="ph-bold ph-arrow-right"></i> Ir a la App
+                    </p>
+                </a>
+
+                <!-- Propiedad 2: TREASURY (Finanzas) -->
+                <a href="https://finanzas.godsplan.site" class="app-card rounded-xl p-6 flex flex-col justify-between">
+                    <div>
+                        <i class="ph-fill ph-wallet text-3xl text-brand mb-3"></i>
+                        <h3 class="text-2xl font-bold">Treasury</h3>
+                        <p class="text-gray-400 text-sm mt-1">Gestión avanzada de activos y flujos de caja.</p>
+                    </div>
+                    <p class="text-xs font-mono mt-4 text-gray-500 flex items-center gap-1">
+                        <i class="ph-bold ph-arrow-right"></i> Ir a la App
+                    </p>
+                </a>
+                
+                <!-- Propiedad 3: CORPOCHAT -->
+                <a href="https://chat.godsplan.site" class="app-card rounded-xl p-6 flex flex-col justify-between">
+                    <div>
+                        <i class="ph-fill ph-chats-teardrop text-3xl text-brand mb-3"></i>
+                        <h3 class="text-2xl font-bold">CorpoChat</h3>
+                        <p class="text-gray-400 text-sm mt-1">Plataforma de comunicación corporativa cifrada.</p>
+                    </div>
+                    <p class="text-xs font-mono mt-4 text-gray-500 flex items-center gap-1">
+                        <i class="ph-bold ph-arrow-right"></i> Ir a la App
+                    </p>
+                </a>
+                
+                <!-- Propiedad 4: AUTH VAULT -->
+                <a href="https://auth.godsplan.site" class="app-card rounded-xl p-6 flex flex-col justify-between">
+                    <div>
+                        <i class="ph-fill ph-shield-check text-3xl text-brand mb-3"></i>
+                        <h3 class="text-2xl font-bold">Auth Vault</h3>
+                        <p class="text-gray-400 text-sm mt-1">Generador y gestor centralizado de credenciales.</p>
+                    </div>
+                    <p class="text-xs font-mono mt-4 text-gray-500 flex items-center gap-1">
+                        <i class="ph-bold ph-arrow-right"></i> Ir a la App
+                    </p>
+                </a>
+
+            </div>
+        </section>
+
+        <!-- SECCIÓN 3: CONTROL DE CUENTA (Importante para la Ergonomía) -->
+        <section>
+            <h2 class="text-xl font-bold mb-4 text-gray-300 flex items-center gap-2">
+                <i class="ph-fill ph-gear-six-fill text-brand"></i> AJUSTES MAESTROS
+            </h2>
+            <a href="https://cuenta.godsplan.site" class="app-card rounded-xl p-4 flex justify-between items-center hover:bg-brand/10">
+                <div>
+                    <h3 class="text-xl font-bold text-white">Gestionar Cuenta Principal</h3>
+                    <p class="text-gray-400 text-sm">Cambiar contraseña, actualizar perfil y permisos globales.</p>
+                </div>
+                <i class="ph-bold ph-caret-right text-brand text-2xl"></i>
+            </a>
+        </section>
+
+    </main>
+
+    <footer class="p-6 text-center border-t border-white/5 mt-12">
+        <p class="text-xs text-gray-700 font-mono">SISTEMA SEGURO GOD'S PLAN © 2025</p>
+    </footer>
+
+    <!-- LÓGICA DE FIREBASE Y CONTROL DE ACCESO -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut, signInWithCustomToken, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        
+        // --- CONFIGURACIÓN DE ENTORNO ---
+        const FALLBACK_CONFIG = { apiKey: "AIzaSyCrHBz94UtgiaYntHCYhC5jNa6auUI63vQ", authDomain: "god-s-plan-d737b.firebaseapp.com", projectId: "god-s-plan-d737b", storageBucket: "god-s-plan-d737b.firebasestorage.app", messagingSenderId: "458198314028", appId: "1:458198314028:web:d62b24cee2d19ee5b47589" };
+        let firebaseConfig = FALLBACK_CONFIG;
+        
+        try { 
+            if (typeof __firebase_config !== 'undefined' && __firebase_config) { 
+                const envConfig = typeof __firebase_config === 'string' ? JSON.parse(__firebase_config) : __firebase_config; 
+                if (envConfig && envConfig.apiKey) firebaseConfig = envConfig; 
+            } 
+        } catch(e) { console.error("Error cargando config:", e); }
+
+        const APP_ID = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const LOGIN_URL = "https://godsplan.site"; 
+
+        // Inicializar Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // --- LÓGICA DE DATOS Y RENDERIZADO ---
+        
+        // Mapeo de estado para Ergonomía visual (Negro/Rojo)
+        function getStatusVisuals(status) {
+            switch(status) {
+                case 'CRÍTICO':
+                    return { class: 'text-red-500 border-red-500/50 bg-red-900/10 hover:bg-red-900/20', icon: 'ph-fill ph-warning-circle' };
+                case 'DEGRADADO':
+                    return { class: 'text-yellow-500 border-yellow-500/50 bg-yellow-900/10 hover:bg-yellow-900/20', icon: 'ph-fill ph-warning' };
+                default:
+                    return { class: 'text-emerald-500 border-emerald-500/50 bg-emerald-900/10 hover:bg-emerald-900/20', icon: 'ph-fill ph-check-circle' };
+            }
+        }
+
+        // Renderizado del Status Global (Eficiencia)
+        function renderSystemStatus(statusData) {
+            const container = document.getElementById('status-cards-container');
+            if (!container) return;
+
+            container.innerHTML = statusData.map(item => {
+                const visuals = getStatusVisuals(item.status);
+                
+                return `
+                    <div class="app-card p-4 rounded-xl text-left ${visuals.class} transition-all duration-300 border-2">
+                        <div class="flex items-center space-x-2">
+                            <i class="${visuals.icon} text-xl"></i>
+                            <span class="text-xs font-bold uppercase tracking-wider text-gray-400">${item.name}</span>
+                        </div>
+                        <p class="text-2xl font-black mt-1 text-white">${item.status}</p>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Simulación de los datos que vendrían de Firebase (temporal)
+        const mockStatus = [
+            { name: 'Adherencia', status: 'OK' },
+            { name: 'Treasury', status: 'DEGRADADO' },
+            { name: 'Auth Vault', status: 'CRÍTICO' },
+            { name: 'CorpoChat', status: 'OK' }
+        ];
+
+
+        // --- LÓGICA DE AUTENTICACIÓN ---
+        window.authLogic = {
+            handleSignOut: async function() {
+                await signOut(auth);
+                window.location.href = LOGIN_URL;
+            }
+        };
+
+        // Listener de Estado de Autenticación (Seguridad y Redirección)
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                // Si no hay usuario logueado, redirigir al portal de login
+                window.location.href = LOGIN_URL;
+                return;
+            }
+
+            // Usuario Autenticado: Muestra la información (Ergonomía)
+            const userName = user.displayName || 'Magnate'; 
+            document.getElementById('welcome-user-name').textContent = userName.toUpperCase();
+            document.getElementById('user-display').textContent = 'Cerrar Sesión';
+            document.getElementById('user-id-display').textContent = user.email || user.uid;
+
+            // Suscripción al estado del sistema (Eficiencia en datos)
+            try {
+                // Asume que el estado global es público, usando el mismo path del portal
+                const statusDocRef = doc(db, `artifacts/${APP_ID}/public/data/systemStatus/live`);
+
+                onSnapshot(statusDocRef, (docSnap) => {
+                    if (docSnap.exists() && docSnap.data().statusList) {
+                        renderSystemStatus(docSnap.data().statusList);
+                    } else {
+                        // Usar mock si no hay data en Firebase (para desarrollo)
+                        renderSystemStatus(mockStatus); 
+                    }
+                }, (error) => {
+                    console.error("Error al obtener el estado de Firebase:", error);
+                    renderSystemStatus(mockStatus); 
+                });
+            } catch (error) {
+                console.error("Error al suscribirse a Firestore:", error);
+                renderSystemStatus(mockStatus);
+            }
+        });
+
+        // Simulación de carga para que el dashboard no se quede vacío si la suscripción falla
+        document.addEventListener('DOMContentLoaded', () => {
+             if (!auth.currentUser) renderSystemStatus(mockStatus);
+        });
+    </script>
+</body>
+</html>
